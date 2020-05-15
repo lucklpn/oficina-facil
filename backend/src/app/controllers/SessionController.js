@@ -8,7 +8,7 @@ import authConfig from '../../config/auth';
 class SessionController {
   async store(req, res) {
     const schema = Yup.object().shape({
-      email: Yup.string().email().required(),
+      login: Yup.string().required(),
       password: Yup.string().min(6).required(),
     });
 
@@ -18,9 +18,9 @@ class SessionController {
       });
     }
 
-    const { email, password } = req.body;
+    const { login, password } = req.body;
 
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({ where: { login } });
 
     const passwordMatch = user && (await user.checkPassword(password));
 
@@ -34,7 +34,7 @@ class SessionController {
     const { id, name } = user;
 
     return res.json({
-      user: { id, name, email },
+      user: { id, name, login },
       token: jwt.sign({ id }, authConfig.secretKey, {
         expiresIn: authConfig.expiresIn,
       }),

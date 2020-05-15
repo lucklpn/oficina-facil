@@ -8,39 +8,32 @@ import api from '~/services/api';
 
 import { customSelectStyles } from './styles';
 
-export default function CustomerCarsSelect({
-  name,
-  defaultValue,
-  customerId,
-  disabled,
-}) {
+export default function PaymentMethodsSelect({ name }) {
   const { registerField } = useField(name);
 
-  const [customerCar, setCustomerCar] = useState({ value: '', label: '' });
+  const [paymentMethod, setPaymentMethod] = useState({ value: '', label: '' });
   const [defaultOptions, setDefaultOptions] = useState([]);
 
   const ref = useRef();
 
   useEffect(() => {
-    async function loadCustomerCars() {
+    async function loadPaymentMethods() {
       try {
-        const response = await api.get(`customers/${customerId}/cars`);
+        const response = await api.get(`payment_methods`);
 
         setDefaultOptions(
-          response.data.map((car) => ({
-            value: car.id,
-            label: `${car.model}, ${car.manufacture_year} | Placa: ${car.license_plate}`,
+          response.data.map((method) => ({
+            value: method.id,
+            label: method.description,
           }))
         );
       } catch (err) {
-        toast.error('Erro ao buscar veículos');
+        toast.error('Erro ao buscar métodos de pagamento');
       }
     }
 
-    if (customerId) {
-      loadCustomerCars();
-    }
-  }, [customerId]);
+    loadPaymentMethods();
+  }, []);
 
   useEffect(() => {
     if (ref.current) {
@@ -52,10 +45,6 @@ export default function CustomerCarsSelect({
     }
   }, [ref, registerField, name]);
 
-  useEffect(() => {
-    setCustomerCar({ value: defaultValue, label: defaultValue });
-  }, [defaultValue]);
-
   return (
     <>
       <ReactSelect
@@ -63,15 +52,14 @@ export default function CustomerCarsSelect({
         isSearchable
         placeholder=""
         noOptionsMessage={() => 'Não encontrado'}
-        value={customerCar}
-        onChange={(selectedOption) => setCustomerCar(selectedOption)}
+        value={paymentMethod}
+        onChange={(selectedOption) => setPaymentMethod(selectedOption)}
         styles={customSelectStyles}
-        isDisabled={disabled}
       />
 
       <Input
         name={name}
-        value={customerCar.value || ''}
+        value={paymentMethod.value || ''}
         onChange={() => {}}
         hidden
       />
@@ -79,15 +67,6 @@ export default function CustomerCarsSelect({
   );
 }
 
-CustomerCarsSelect.propTypes = {
+PaymentMethodsSelect.propTypes = {
   name: PropTypes.string.isRequired,
-  defaultValue: PropTypes.string,
-  customerId: PropTypes.number,
-  disabled: PropTypes.bool,
-};
-
-CustomerCarsSelect.defaultProps = {
-  defaultValue: '',
-  customerId: undefined,
-  disabled: false,
 };

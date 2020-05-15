@@ -15,16 +15,14 @@ export default function SignIn() {
   const dispatch = useDispatch();
 
   const schema = Yup.object().shape({
-    email: Yup.string()
-      .email('Informe um email válido')
-      .required('* Campo obrigatório'),
+    login: Yup.string().required('* Campo obrigatório'),
     password: Yup.string()
       .min(6, 'A senha deve ter no mínimo 15 caracteres')
       .required('* Campo obrigatório'),
   });
 
-  function handleSubmit({ email, password }) {
-    dispatch(signInRequest(email, password));
+  function handleSubmit({ login, password }) {
+    dispatch(signInRequest(login, password));
   }
 
   return (
@@ -33,19 +31,9 @@ export default function SignIn() {
 
       <Form schema={schema} onSubmit={handleSubmit}>
         <Content>
-          <Input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="email@exemplo.com"
-          />
+          <Input id="login" name="login" />
 
-          <Input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="********"
-          />
+          <Input type="password" id="password" name="password" />
         </Content>
 
         <button type="submit" disabled={loading}>

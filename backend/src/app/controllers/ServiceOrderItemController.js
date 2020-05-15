@@ -42,13 +42,17 @@ class ServiceOrderItemController {
       ...req.body,
     });
 
+    const totalItemValue =
+      parseFloat(serviceOrderItem.toJSON().amount) *
+      parseFloat(serviceOrderItem.toJSON().value);
+
     /**
      * Atualiza o valor total da ordem de serviço
      */
 
     await serviceOrder.update({
       total_value:
-        Number(serviceOrder.total_value) + Number(serviceOrderItem.value),
+        parseFloat(serviceOrder.toJSON().total_value) + totalItemValue,
     });
 
     return res.json(serviceOrderItem);

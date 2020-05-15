@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { format } from 'date-fns';
+import pt from 'date-fns/locale/pt';
 
 import MaskedInput from '../MaskedInput';
 import CustomersSelect from './CustomersSelect';
@@ -46,7 +48,7 @@ export default function MainData() {
             id="date"
             name="date"
             mask="99/99/9999"
-            defaultValue={mainData.date}
+            defaultValue={format(new Date(), 'dd/MM/yyyy', { locale: pt })}
           />
         </CustomFormGroup>
       </FormContainer>

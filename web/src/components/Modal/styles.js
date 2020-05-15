@@ -1,6 +1,16 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 import colors from '~/utils/colors';
+
+const wrapperFadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+`;
 
 export const Wrapper = styled.div`
   position: fixed;
@@ -13,6 +23,7 @@ export const Wrapper = styled.div`
   top: 0;
   left: 0;
   z-index: 1998;
+  animation: ${wrapperFadeIn} 300ms 0s forwards;
 `;
 
 export const Container = styled.div`
@@ -23,6 +34,7 @@ export const Container = styled.div`
   max-width: 550px;
   min-height: 300px;
   background: #f2f2f2;
+  box-shadow: 0 0 80px 20px rgba(0, 0, 0, 0.3);
   border-radius: 10px;
   z-index: 1999;
 

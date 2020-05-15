@@ -1,7 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Form } from '@rocketseat/unform';
 import * as Yup from 'yup';
+import { parse } from 'date-fns';
+import { toast } from 'react-toastify';
+
+import api from '~/services/api';
+import history from '~/services/history';
 
 import MainData from './MainData';
 import ServiceItems from './ServiceItems';
@@ -17,61 +22,31 @@ export default function NewServiceOrder() {
   const [modalServiceItem, setModalServiceItem] = useState(undefined);
   const [loading, setLoading] = useState(false); //eslint-disable-line
 
+  const totalValue = useMemo(() => {
+    return serviceItems.reduce((total, item) => {
+      return total + item.total_value;
+    }, 0);
+  }, [serviceItems]);
+
   const serviceOrderSchema = Yup.object().shape({
-    customer_id: Yup.number()
-      .typeError('* Campo obrigatório')
-      .required('* Campo obrigatório'),
-    customer_car_id: Yup.number()
-      .typeError('* Campo obrigatório')
-      .required('* Campo obrigatório'),
-    date: Yup.date()
-      .typeError('Por favor informe um valor válido')
-      .required('* Campo obrigatório'),
+    customer_id: Yup.string().required('* Campo obrigatório'),
+    customer_car_id: Yup.string().required('* Campo obrigatório'),
+    date: Yup.string().required('* Campo obrigatório'),
     service_items: Yup.array(
       Yup.object().shape({
         description: Yup.string().required('* Campo obrigatório'),
-        amount: Yup.number()
-          .typeError('* Campo obrigatório')
-          .required('* Campo obrigatório')
-          .min(1, 'Quantidade mínima é 1'),
-        value: Yup.number()
-          .typeError('* Campo obrigatório')
-          .required('* Campo obrigatório')
-          .min(1, 'Valor mínimo é 1'),
+        amount: Yup.string().required('* Campo obrigatório'),
+        value: Yup.string().required('* Campo obrigatório'),
       })
     ),
+    total_value: Yup.string(),
+    payment: Yup.object().shape({
+      value: Yup.string(),
+      payment_method_id: Yup.string().when('value', (value, field) =>
+        value ? field.required('* Campo obrigatório') : field
+      ),
+    }),
   });
-
-  useEffect(() => {
-    async function loadCustomer() {
-      // try {
-      //   const response = await api.get(`customers/${customerId}`);
-      //   setCustomer(response.data);
-      // } catch (err) {
-      //   toast.error(
-      //     err.response ? err.response.data.error : 'Erro ao buscar cliente.'
-      //   );
-      // }
-    }
-
-    async function loadCars() {
-      // try {
-      //   const response = await api.get(`customers/${customerId}/cars`);
-      //   setCars(response.data);
-      // } catch (err) {
-      //   toast.error(
-      //     err.response ? err.response.data.error : 'Erro ao buscar veículos.'
-      //   );
-      // }
-    }
-
-    const routeParam = window.location.pathname.split('/')[2];
-
-    if (routeParam !== 'new' && Number(routeParam)) {
-      loadCustomer(routeParam);
-      loadCars(routeParam);
-    }
-  }, []);
 
   function handleAddServiceItem(data) {
     setServiceItems([
@@ -97,77 +72,76 @@ export default function NewServiceOrder() {
       })
     );
 
+    setModalServiceItem(null);
     setModalIsOpen(false);
   }
 
   function handleRemoveServiceItem(index) {
-    setServiceItems(
-      serviceItems.map((item, i) => {
-        if (i !== index) return item;
-
-        return { ...item, removed: true };
-      })
-    );
+    setServiceItems(serviceItems.filter((item, i) => i !== index));
   }
 
   // eslint-disable-next-line
-  async function saveCustomer(customerData) {
-    // if (customer.id) {
-    //   await api.put(`customers/${customer.id}`, customerData);
-    //   return customer.id;
-    // }
-    // const response = await api.post('customers', customerData);
-    // return response.data.id;
+  async function storeServiceOrder({ total_value, ...data }) {
+    const parsedDate = parse(data.date, 'dd/MM/yyyy', new Date());
+
+    const response = await api.post('service_orders', {
+      ...data,
+      date: parsedDate,
+    });
+
+    return response.data.id;
   }
 
-  // eslint-disable-next-line
-  async function saveCar(customerId, customerCar) {
-    // const car = cars.find((c) => c.license_plate === customerCar.license_plate);
-    // if (car.removed) return;
-    // if (car && car.id) {
-    //   await api.put(`customers/${customerId}/cars/${car.id}`, customerCar);
-    // } else {
-    //   await api.post(`customers/${customerId}/cars`, customerCar);
-    // }
+  async function storeServiceItem(serviceOrderId, data) {
+    await api.post(`service_orders/${serviceOrderId}/items`, data);
   }
 
-  // eslint-disable-next-line
-  async function deleteCar(customerId, customerCarId) {
-    // await api.delete(`customers/${customerId}/cars/${customerCarId}`);
+  async function storeServicePayment(serviceOrderId, data) {
+    await api.post(`service_orders/${serviceOrderId}/payments`, {
+      ...data,
+      date: new Date(),
+    });
   }
 
-  // eslint-disable-next-line
   async function handleSubmit(data) {
-    // const customerCarsAmount = cars.filter((c) => !c.removed);
-    // if (customerCarsAmount <= 0) {
-    //   toast.error(
-    //     'Não é possível salvar um cliente sem automóveis cadastrados.'
-    //   );
-    //   return;
-    // }
-    // setLoading(true);
-    // try {
-    //   const customerId = await saveCustomer(data);
-    //   for (const car of cars) {
-    //     await saveCar(customerId, car); //eslint-disable-line
-    //   }
-    //   const removedCars = cars.filter((c) => c.removed);
-    //   for (const car of removedCars) {
-    //     await deleteCar(customerId, car.id); //eslint-disable-line
-    //   }
-    //   toast.success(
-    //     `Cliente ${customer.id ? 'atualizado' : 'cadastrado'} com sucesso.`
-    //   );
-    //   setLoading(false);
-    //   setTimeout(() => {
-    //     history.push('/customers');
-    //   }, 3000);
-    // } catch (err) {
-    //   setLoading(false);
-    //   toast.error(
-    //     err.response ? err.response.data.error : 'Erro ao salvar cliente.'
-    //   );
-    // }
+    if (serviceItems.length === 0) {
+      toast.error('Por favor, informe os itens do serviço.');
+      return;
+    }
+
+    if (parseFloat(data.payment.value) > parseFloat(data.total_value)) {
+      toast.error('Valor de pagamento excede valor total da ordem de serviço.');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { service_items: items, payment, ...rest } = data;
+
+      const serviceOrderId = await storeServiceOrder(rest);
+
+      for (const item of items) {
+        await storeServiceItem(serviceOrderId, item); //eslint-disable-line
+      }
+
+      if (payment.value) {
+        await storeServicePayment(serviceOrderId, payment);
+      }
+
+      toast.success('Serviço cadastrado com sucesso.');
+
+      setLoading(false);
+
+      setTimeout(() => {
+        history.push('/orders');
+      }, 3000);
+    } catch (err) {
+      setLoading(false);
+      toast.error(
+        err.response ? err.response.data.error : 'Erro ao salvar serviço.'
+      );
+    }
   }
 
   return (
@@ -202,7 +176,7 @@ export default function NewServiceOrder() {
             }}
           />
 
-          <FinancialData />
+          <FinancialData totalValue={totalValue} />
 
           <button type="submit" disabled={loading}>
             {loading ? 'SALVANDO...' : 'SALVAR'}

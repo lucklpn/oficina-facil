@@ -26,52 +26,48 @@ export default function ServiceItemsTable({ items, onEditItem, onRemoveItem }) {
           </tr>
         </thead>
         <tbody>
-          {items
-            .filter((item) => !item.removed)
-            .map((item, index) => (
-              <tr key={item.id ? String(item.id) : item.description}>
-                <td>{item.amount.toString().padStart(2, '0')}</td>
-                <td>{item.description}</td>
-                <td>{formatToCurrency(item.value)}</td>
-                <td>{formatToCurrency(item.total_value)}</td>
-                <td>
-                  <PopoverMenu
-                    isOpen={popoverOpen === item.description}
-                    onClickOutside={() => setPopoverOpen(null)}
-                    onButtonClick={() =>
-                      setPopoverOpen(
-                        popoverOpen === item.description
-                          ? null
-                          : item.description
-                      )
-                    }
-                  >
-                    <li>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          onEditItem(item);
-                        }}
-                      >
-                        <FaPen size={15} color={colors.yellow.main} />
-                        Editar Cadastro
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          onRemoveItem(index);
-                        }}
-                      >
-                        <FaTrashAlt size={15} color={colors.primary.main} />
-                        Excluir Cadastro
-                      </button>
-                    </li>
-                  </PopoverMenu>
-                </td>
-              </tr>
-            ))}
+          {items.map((item, index) => (
+            <tr key={item.id ? String(item.id) : item.description}>
+              <td>{item.amount.toString().padStart(2, '0')}</td>
+              <td>{item.description}</td>
+              <td>{formatToCurrency(item.value)}</td>
+              <td>{formatToCurrency(item.total_value)}</td>
+              <td>
+                <PopoverMenu
+                  isOpen={popoverOpen === item.description}
+                  onClickOutside={() => setPopoverOpen(null)}
+                  onButtonClick={() =>
+                    setPopoverOpen(
+                      popoverOpen === item.description ? null : item.description
+                    )
+                  }
+                >
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onEditItem(item);
+                      }}
+                    >
+                      <FaPen size={15} color={colors.yellow.main} />
+                      Editar Cadastro
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onRemoveItem(index);
+                      }}
+                    >
+                      <FaTrashAlt size={15} color={colors.primary.main} />
+                      Excluir Cadastro
+                    </button>
+                  </li>
+                </PopoverMenu>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </TableData>
     </Container>

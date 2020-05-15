@@ -31,7 +31,7 @@ export default function ServiceItems({
           hidden
         />
 
-        {serviceItems.filter((item) => !item.removed).length > 0 && (
+        {serviceItems.length > 0 && (
           <ServiceItemsTable
             items={serviceItems}
             onEditItem={onEditItem}

@@ -1,15 +1,33 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Input } from '@rocketseat/unform';
+import { MdCheckBoxOutlineBlank, MdCheckBox } from 'react-icons/md';
 
-import MaskedInput from '../MaskedInput';
-import CustomersSelect from './CustomersSelect';
-import CustomerCarsSelect from './CustomerCarsSelect';
+import colors from '~/utils/colors';
+
+import PaymentMethodsSelect from './PaymentMethodsSelect';
 
 import { Container, FormContainer } from '../styles';
 import { CustomFormGroup, Divider } from './styles';
 
-export default function FinancialData() {
-  const [mainData, setMainData] = useState({});
+export default function FinancialData({ totalValue }) {
+  const [isCashPayment, setIsCashPayment] = useState(false);
+  const [serviceOrderPayment, setServiceOrderPayment] = useState({});
+
+  function handleChangeCashPayment() {
+    setIsCashPayment(!isCashPayment);
+    setServiceOrderPayment({
+      ...setServiceOrderPayment,
+      value: isCashPayment ? '' : totalValue,
+    });
+  }
+
+  function handleChangePaidValue(value) {
+    setServiceOrderPayment({
+      ...serviceOrderPayment,
+      value,
+    });
+  }
 
   return (
     <Container>
@@ -19,34 +37,67 @@ export default function FinancialData() {
 
       <FormContainer>
         <CustomFormGroup id="totalValueFormGroup">
-          <label htmlFor="total_value">Valor Total</label>
-          <Input id="total_value" name="total_value" disabled />
+          <label htmlFor="total_value">Valor Total (R$)</label>
+          <Input
+            id="total_value"
+            name="total_value"
+            value={totalValue ? Number(totalValue).toFixed(2) : ''}
+            disabled
+          />
+        </CustomFormGroup>
+
+        <CustomFormGroup
+          id="cashPaymentFormGroup"
+          onClick={handleChangeCashPayment}
+        >
+          {isCashPayment && (
+            <MdCheckBox size={22} color={colors.primary.main} />
+          )}
+
+          {!isCashPayment && (
+            <MdCheckBoxOutlineBlank size={22} color={colors.primary.main} />
+          )}
+
+          <label htmlFor="cash_payment">Pagamento à vista</label>
         </CustomFormGroup>
       </FormContainer>
 
       <Divider />
 
       <FormContainer>
-        <CustomFormGroup id="customerCarFormGroup">
-          <label htmlFor="customer_car_id">Veículo</label>
-          <CustomerCarsSelect
-            id="customer_car_id"
-            name="customer_car_id"
-            customerId={mainData.customer_id}
-            disabled={!mainData.customer_id}
+        <CustomFormGroup id="valuePaidFormGroup">
+          <label htmlFor="payment.value">Valor Pago (R$)</label>
+          <Input
+            type="number"
+            id="payment.value"
+            name="payment.value"
+            value={serviceOrderPayment.value || ''}
+            onChange={(e) => {
+              handleChangePaidValue(e.target.value);
+            }}
+            onBlur={(e) => {
+              handleChangePaidValue(Number(e.target.value).toFixed(2));
+            }}
+            disabled={!!isCashPayment}
           />
         </CustomFormGroup>
 
-        <CustomFormGroup id="dateFormGroup">
-          <label htmlFor="date">Data</label>
-          <MaskedInput
-            id="date"
-            name="date"
-            mask="99/99/9999"
-            defaultValue={mainData.date}
+        <CustomFormGroup id="paymentMethodFormGroup">
+          <label htmlFor="payment.payment_method_id">Forma de Pagamento</label>
+          <PaymentMethodsSelect
+            id="payment.payment_method_id"
+            name="payment.payment_method_id"
           />
         </CustomFormGroup>
       </FormContainer>
     </Container>
   );
 }
+
+FinancialData.propTypes = {
+  totalValue: PropTypes.number,
+};
+
+FinancialData.defaultProps = {
+  totalValue: '',
+};

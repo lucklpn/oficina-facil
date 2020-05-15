@@ -65,7 +65,7 @@ export default createGlobalStyle`
     box-shadow: 0 0 0 30px white inset !important;
   }
 
-  input:not([type="submit"]):focus, textarea:focus {
+  input:focus, textarea:focus {
     border-color: ${colors.primary.main};
   }
 

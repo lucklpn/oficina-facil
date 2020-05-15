@@ -3,12 +3,29 @@ import styled from 'styled-components';
 import { FormGroup } from '../styles';
 
 export const CustomFormGroup = styled(FormGroup)`
-  &#totalValueFormGroup {
-    width: 49%;
+  &#totalValueFormGroup,
+  &#valuePaidFormGroup {
+    width: 25%;
   }
 
-  &#dateFormGroup {
-    width: 20%;
+  &#cashPaymentFormGroup {
+    width: 73%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    margin: auto 0;
+    transform: translateY(12px);
+    cursor: pointer;
+
+    label {
+      margin: 0 0 0 10px;
+    }
+  }
+
+  &#paymentMethodFormGroup {
+    width: 50%;
+    margin: 15px auto 15px 2%;
   }
 `;
 

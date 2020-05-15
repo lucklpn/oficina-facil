@@ -8,10 +8,10 @@ import history from '~/services/history';
 
 export function* signIn({ payload }) {
   try {
-    const { email, password } = payload;
+    const { login, password } = payload;
 
     const response = yield call(api.post, 'sessions', {
-      email,
+      login,
       password,
     });
 
@@ -29,11 +29,11 @@ export function* signIn({ payload }) {
 
 export function* signUp({ payload }) {
   try {
-    const { name, email, user_password } = payload;
+    const { name, login, user_password } = payload;
 
     yield call(api.post, 'users', {
       name,
-      email,
+      login,
       user_password,
     });
 
