@@ -8,6 +8,7 @@ import { Wrapper, Container, Header } from './styles';
 export default function Modal({
   children,
   isOpen,
+  title,
   initialData,
   schemaValidator,
   onClose,
@@ -20,7 +21,7 @@ export default function Modal({
         <Wrapper>
           <Container {...rest}>
             <Header>
-              <h2>Adicionar Item</h2>
+              <h2>{title}</h2>
 
               <button type="button" onClick={onClose}>
                 <IoIosClose size={38} color="#fff" />
@@ -46,6 +47,7 @@ export default function Modal({
 Modal.propTypes = {
   children: PropTypes.arrayOf(PropTypes.element),
   isOpen: PropTypes.bool.isRequired,
+  title: PropTypes.string,
   initialData: PropTypes.shape(),
   schemaValidator: PropTypes.shape(),
   onClose: PropTypes.func.isRequired,
@@ -54,6 +56,7 @@ Modal.propTypes = {
 
 Modal.defaultProps = {
   children: null,
+  title: '',
   initialData: {},
   schemaValidator: {},
 };

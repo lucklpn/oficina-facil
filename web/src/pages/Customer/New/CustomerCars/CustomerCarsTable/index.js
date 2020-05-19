@@ -9,7 +9,11 @@ import colors from '~/utils/colors';
 
 import { Container } from './styles';
 
-export default function CustomerCarsTable({ cars, onEditCar, onRemoveCar }) {
+export default function CustomerCarsTable({
+  data,
+  handleEditCar,
+  handleRemoveCar,
+}) {
   const [popoverOpen, setPopoverOpen] = useState(null);
 
   return (
@@ -25,7 +29,7 @@ export default function CustomerCarsTable({ cars, onEditCar, onRemoveCar }) {
           </tr>
         </thead>
         <tbody>
-          {cars
+          {data
             .filter((car) => !car.removed)
             .map((car) => (
               <tr key={car.license_plate}>
@@ -49,7 +53,7 @@ export default function CustomerCarsTable({ cars, onEditCar, onRemoveCar }) {
                       <button
                         type="button"
                         onClick={() => {
-                          onEditCar(car.license_plate);
+                          handleEditCar(car.license_plate);
                         }}
                       >
                         <FaPen size={15} color={colors.yellow.main} />
@@ -60,7 +64,7 @@ export default function CustomerCarsTable({ cars, onEditCar, onRemoveCar }) {
                       <button
                         type="button"
                         onClick={() => {
-                          onRemoveCar(car.license_plate);
+                          handleRemoveCar(car.license_plate);
                         }}
                       >
                         <FaTrashAlt size={15} color={colors.primary.main} />
@@ -78,7 +82,7 @@ export default function CustomerCarsTable({ cars, onEditCar, onRemoveCar }) {
 }
 
 CustomerCarsTable.propTypes = {
-  cars: PropTypes.arrayOf(
+  data: PropTypes.arrayOf(
     PropTypes.shape({
       model: PropTypes.string.isRequired,
       manufacture_year: PropTypes.number.isRequired,
@@ -86,11 +90,11 @@ CustomerCarsTable.propTypes = {
       license_plate: PropTypes.string.isRequired,
     })
   ).isRequired,
-  onEditCar: PropTypes.func,
-  onRemoveCar: PropTypes.func,
+  handleEditCar: PropTypes.func,
+  handleRemoveCar: PropTypes.func,
 };
 
 CustomerCarsTable.defaultProps = {
-  onEditCar: () => {},
-  onRemoveCar: () => {},
+  handleEditCar: () => {},
+  handleRemoveCar: () => {},
 };

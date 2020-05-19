@@ -9,6 +9,7 @@ class ServiceOrder extends Model {
         date: Sequelize.STRING,
         total_value: Sequelize.DECIMAL,
         paid_out: Sequelize.BOOLEAN,
+        deleted_at: Sequelize.DATE,
       },
       {
         sequelize,

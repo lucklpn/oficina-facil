@@ -10,7 +10,7 @@ import { formatToCurrency } from '~/utils/format';
 
 import { Container } from './styles';
 
-export default function ServiceItemsTable({ items, onEditItem, onRemoveItem }) {
+export default function ServiceItemsTable({ data, onEditItem, onRemoveItem }) {
   const [popoverOpen, setPopoverOpen] = useState(null);
 
   return (
@@ -26,7 +26,7 @@ export default function ServiceItemsTable({ items, onEditItem, onRemoveItem }) {
           </tr>
         </thead>
         <tbody>
-          {items.map((item, index) => (
+          {data.map((item, index) => (
             <tr key={item.id ? String(item.id) : item.description}>
               <td>{item.amount.toString().padStart(2, '0')}</td>
               <td>{item.description}</td>
@@ -75,7 +75,7 @@ export default function ServiceItemsTable({ items, onEditItem, onRemoveItem }) {
 }
 
 ServiceItemsTable.propTypes = {
-  items: PropTypes.arrayOf(
+  data: PropTypes.arrayOf(
     PropTypes.shape({
       amount: PropTypes.number.isRequired,
       description: PropTypes.string.isRequired,

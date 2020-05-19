@@ -4,11 +4,7 @@ import background from '~/assets/internal-background.png';
 
 export const Wrapper = styled.div`
   min-height: 100vh;
-  background: linear-gradient(
-    to bottom,
-    transparent 300px,
-    #e4e4e4 calc(100vh - 450px)
-  );
+  background: linear-gradient(to bottom, transparent 300px, #fff 0px);
   padding-bottom: 50px;
 `;
 

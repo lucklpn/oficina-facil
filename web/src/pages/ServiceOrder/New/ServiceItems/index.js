@@ -11,7 +11,7 @@ import { Container } from '../styles';
 import { AddButton } from './styles';
 
 export default function ServiceItems({
-  serviceItems,
+  data,
   onShowModal,
   onEditItem,
   onRemoveItem,
@@ -26,18 +26,16 @@ export default function ServiceItems({
         <Input
           id="service_items"
           name="service_items"
-          value={JSON.stringify(serviceItems)}
+          value={JSON.stringify(data)}
           onChange={() => {}}
           hidden
         />
 
-        {serviceItems.length > 0 && (
-          <ServiceItemsTable
-            items={serviceItems}
-            onEditItem={onEditItem}
-            onRemoveItem={onRemoveItem}
-          />
-        )}
+        <ServiceItemsTable
+          data={data}
+          onEditItem={onEditItem}
+          onRemoveItem={onRemoveItem}
+        />
 
         <AddButton onClick={onShowModal}>
           <FaPlus size={16} color={colors.blue.main} />
@@ -49,7 +47,7 @@ export default function ServiceItems({
 }
 
 ServiceItems.propTypes = {
-  serviceItems: PropTypes.arrayOf(
+  data: PropTypes.arrayOf(
     PropTypes.shape({
       amount: PropTypes.number.isRequired,
       description: PropTypes.string.isRequired,

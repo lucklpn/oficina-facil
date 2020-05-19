@@ -8,6 +8,7 @@ class CustomerCar extends Model {
         manufacture_year: Sequelize.INTEGER,
         manufacturer: Sequelize.STRING,
         license_plate: Sequelize.STRING,
+        deleted_at: Sequelize.DATE,
       },
       {
         sequelize,

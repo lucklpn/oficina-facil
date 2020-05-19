@@ -21,4 +21,8 @@ export default {
     main: '#2e7be2',
     lighten: lighten(0.05, '#2e7be2'),
   },
+  purple: {
+    main: '#7159c1',
+    lighten: lighten(0.05, '#7159c1'),
+  },
 };

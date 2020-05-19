@@ -1,36 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Input } from '@rocketseat/unform';
 import * as Yup from 'yup';
 
 import Modal from '~/components/Modal';
-import MaskedInput from '../MaskedInput';
+import MaskedInput from '../../MaskedInput';
 
-import { FormContainer } from '../styles';
+import { FormContainer } from '../../styles';
 import { CustomFormGroup } from './styles';
 
 export default function NewServiceItemModal({
   isOpen,
-  serviceItem,
+  data,
   onAddItem,
   onEditItem,
   onClose,
 }) {
+  const [serviceItem, setServiceItem] = useState({});
+
   const schema = Yup.object().shape({
     description: Yup.string().required('* Campo obrigatório'),
-    amount: Yup.number()
-      .typeError('* Campo obrigatório')
-      .required('* Campo obrigatório')
-      .min(1, 'Quantidade mínima é 1'),
-    value: Yup.number()
-      .typeError('* Campo obrigatório')
-      .required('* Campo obrigatório')
-      .min(1, 'Valor mínimo é 1'),
+    amount: Yup.string().required('* Campo obrigatório'),
+    value: Yup.string().required('* Campo obrigatório'),
   });
+
+  useEffect(() => {
+    setServiceItem(data || {});
+  }, [data]);
+
+  function handleChangeValue(value) {
+    setServiceItem({
+      ...serviceItem,
+      value,
+    });
+  }
 
   return (
     <Modal
       isOpen={isOpen}
+      title="Adicionar item"
       initialData={serviceItem}
       schemaValidator={schema}
       onClose={onClose}
@@ -51,13 +59,24 @@ export default function NewServiceItemModal({
             id="amount"
             name="amount"
             mask="9999"
-            defaultValue={serviceItem ? serviceItem.amount : undefined}
+            defaultValue={serviceItem ? serviceItem.amount : ''}
           />
         </CustomFormGroup>
 
         <CustomFormGroup id="valueFormGroup">
           <label htmlFor="value">Valor Unitário (R$)</label>
-          <Input type="number" id="value" name="value" step="0.01" />
+          <Input
+            type="number"
+            id="value"
+            name="value"
+            value={serviceItem.value || ''}
+            onChange={(e) => {
+              handleChangeValue(e.target.value);
+            }}
+            onBlur={(e) => {
+              handleChangeValue(Number(e.target.value).toFixed(2));
+            }}
+          />
         </CustomFormGroup>
       </FormContainer>
     </Modal>
@@ -66,7 +85,7 @@ export default function NewServiceItemModal({
 
 NewServiceItemModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  serviceItem: PropTypes.shape({
+  data: PropTypes.shape({
     description: PropTypes.string,
     amount: PropTypes.number,
     value: PropTypes.number,
@@ -77,5 +96,5 @@ NewServiceItemModal.propTypes = {
 };
 
 NewServiceItemModal.defaultProps = {
-  serviceItem: undefined,
+  data: undefined,
 };

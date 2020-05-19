@@ -9,6 +9,11 @@ export const Container = styled.table`
   text-align: left;
 
   thead {
+    th#idColumn {
+      width: 100px;
+      text-align: center;
+    }
+
     th#menuColumn {
       width: 75px;
     }

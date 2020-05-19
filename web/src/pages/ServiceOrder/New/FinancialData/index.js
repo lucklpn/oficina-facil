@@ -5,9 +5,10 @@ import { MdCheckBoxOutlineBlank, MdCheckBox } from 'react-icons/md';
 
 import colors from '~/utils/colors';
 
-import PaymentMethodsSelect from './PaymentMethodsSelect';
+import PaymentMethodsSelect from '../../PaymentMethodsSelect';
 
-import { Container, FormContainer } from '../styles';
+import { FormContainer } from '../../styles';
+import { Container } from '../styles';
 import { CustomFormGroup, Divider } from './styles';
 
 export default function FinancialData({ totalValue }) {

@@ -12,7 +12,7 @@ export const Container = styled.section`
 
     th#descriptionColumn {
       width: 55%;
-      min-width: 400px;
+      min-width: 390px;
     }
 
     th#unityValueColumn,

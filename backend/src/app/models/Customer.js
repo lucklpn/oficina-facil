@@ -17,6 +17,7 @@ class Customer extends Model {
         zip_code: Sequelize.STRING,
         city: Sequelize.STRING,
         state: Sequelize.STRING,
+        deleted_at: Sequelize.DATE,
       },
       {
         sequelize,

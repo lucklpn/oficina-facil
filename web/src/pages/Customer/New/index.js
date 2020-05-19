@@ -1,34 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Form, Input } from '@rocketseat/unform';
+import { Form } from '@rocketseat/unform';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
-import { FaPlus } from 'react-icons/fa';
 
 import api from '~/services/api';
 import history from '~/services/history';
 
-import MaskedInput from './MaskedInput';
-import StatesSelect from './StatesSelect';
-import CustomerCarsTable from './CustomerCarsTable';
+import PersonalData from './PersonalData';
+import CustomerCars from './CustomerCars';
+import NewCustomerCarModal from './NewCustomerCarModal';
 
-import colors from '~/utils/colors';
-
-import {
-  Wrapper,
-  Header,
-  Container,
-  FormContainer,
-  FormGroup,
-  AddCarButton,
-  NewCarModal,
-} from './styles';
+import { Wrapper, Header } from './styles';
 
 export default function New() {
   const [customer, setCustomer] = useState({});
   const [cars, setCars] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedCar, setSelectedCar] = useState(null);
+  const [modalCustomerCar, setModalCustomerCar] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const customerSchema = Yup.object().shape({
@@ -43,17 +32,14 @@ export default function New() {
     zip_code: Yup.string(),
     city: Yup.string(),
     state: Yup.string(),
-  });
-
-  const carSchema = Yup.object().shape({
-    model: Yup.string().required('* Campo obrigatório'),
-    manufacture_year: Yup.number()
-      .typeError('* Campo obrigatório')
-      .required('* Campo obrigatório')
-      .min(1, 'Por favor informe um valor válido')
-      .max(new Date().getFullYear(), 'Por favor informe um valor válido'),
-    manufacturer: Yup.string().required('* Campo obrigatório'),
-    license_plate: Yup.string().required('* Campo obrigatório'),
+    customer_cars: Yup.array(
+      Yup.object().shape({
+        model: Yup.string().required('* Campo obrigatório'),
+        manufacture_year: Yup.string().required('* Campo obrigatório'),
+        manufacturer: Yup.string().required('* Campo obrigatório'),
+        license_plate: Yup.string().required('* Campo obrigatório'),
+      })
+    ),
   });
 
   useEffect(() => {
@@ -64,7 +50,7 @@ export default function New() {
         setCustomer(response.data);
       } catch (err) {
         toast.error(
-          err.response ? err.response.data.error : 'Erro ao buscar cliente.'
+          err.response ? err.response.data.error : 'Erro ao buscar cliente'
         );
       }
     }
@@ -76,7 +62,7 @@ export default function New() {
         setCars(response.data);
       } catch (err) {
         toast.error(
-          err.response ? err.response.data.error : 'Erro ao buscar veículos.'
+          err.response ? err.response.data.error : 'Erro ao buscar veículos'
         );
       }
     }
@@ -92,14 +78,15 @@ export default function New() {
   function handleAddCar(data) {
     const selectedCarIndex = cars.findIndex(
       (car) =>
-        car.license_plate.toLowerCase() === data.license_plate.toLowerCase()
+        car.license_plate.toLowerCase().trim() ===
+        data.license_plate.toLowerCase().trim()
     );
 
-    if (selectedCar) {
+    if (modalCustomerCar) {
       if (selectedCarIndex >= 0) {
         if (
-          cars[selectedCarIndex].license_plate.toLowerCase() !==
-          selectedCar.license_plate.toLowerCase()
+          data.license_plate.toLowerCase().trim() !==
+          modalCustomerCar.license_plate.toLowerCase().trim()
         ) {
           toast.error('Já existe um automóvel com essa placa cadastrada.');
           return;
@@ -119,14 +106,14 @@ export default function New() {
       setCars([...cars, data]);
     }
 
-    setSelectedCar(null);
+    setModalCustomerCar(null);
     setModalIsOpen(false);
   }
 
   function handleEditCar(licensePlate) {
     const car = cars.find((c) => c.license_plate === licensePlate);
 
-    setSelectedCar(car);
+    setModalCustomerCar(car);
     setModalIsOpen(true);
   }
 
@@ -173,7 +160,7 @@ export default function New() {
 
     if (customerCarsAmount <= 0) {
       toast.error(
-        'Não é possível salvar um cliente sem automóveis cadastrados.'
+        'Não é possível salvar um cliente sem automóveis cadastrados'
       );
 
       return;
@@ -195,7 +182,7 @@ export default function New() {
       }
 
       toast.success(
-        `Cliente ${customer.id ? 'atualizado' : 'cadastrado'} com sucesso.`
+        `Cliente ${customer.id ? 'atualizado' : 'cadastrado'} com sucesso`
       );
       setLoading(false);
       setTimeout(() => {
@@ -204,7 +191,7 @@ export default function New() {
     } catch (err) {
       setLoading(false);
       toast.error(
-        err.response ? err.response.data.error : 'Erro ao salvar cliente.'
+        err.response ? err.response.data.error : 'Erro ao salvar cliente'
       );
     }
   }
@@ -225,137 +212,16 @@ export default function New() {
           initialData={customer}
           schema={customerSchema}
         >
-          <Container>
-            <header>
-              <h2>DADOS PESSOAIS</h2>
-            </header>
+          <PersonalData data={customer} />
 
-            <FormContainer>
-              <FormGroup id="nameFormGroup">
-                <label htmlFor="name">Nome</label>
-                <Input id="name" name="name" />
-              </FormGroup>
-
-              <FormGroup id="emailFormGroup">
-                <label htmlFor="email">
-                  Email <span>(opcional)</span>
-                </label>
-                <Input id="email" name="email" type="email" />
-              </FormGroup>
-            </FormContainer>
-
-            <FormContainer>
-              <FormGroup id="cpfFormGroup">
-                <label htmlFor="cpf">CPF</label>
-                <MaskedInput
-                  id="cpf"
-                  name="cpf"
-                  mask="999.999.999-99"
-                  defaultValue={customer.cpf}
-                  disabled={!!customer.id}
-                />
-              </FormGroup>
-
-              <FormGroup id="phoneFormGroup">
-                <label htmlFor="phone">
-                  Telefone <span>(opcional)</span>
-                </label>
-                <MaskedInput
-                  id="phone"
-                  name="phone"
-                  mask="(99) 99999-9999"
-                  defaultValue={customer.phone}
-                />
-              </FormGroup>
-            </FormContainer>
-
-            <FormContainer>
-              <FormGroup id="addressFormGroup">
-                <label htmlFor="address">
-                  Endereço <span>(opcional)</span>
-                </label>
-                <Input id="address" name="address" />
-              </FormGroup>
-
-              <FormGroup id="addressNumberFormGroup">
-                <label htmlFor="address_number">
-                  Número <span>(opcional)</span>
-                </label>
-                <Input id="address_number" name="address_number" />
-              </FormGroup>
-            </FormContainer>
-
-            <FormContainer>
-              <FormGroup id="addressComplementFormGroup">
-                <label htmlFor="address_complement">
-                  Complemento <span>(opcional)</span>
-                </label>
-                <Input id="address_complement" name="address_complement" />
-              </FormGroup>
-
-              <FormGroup id="districtFormGroup">
-                <label htmlFor="district">
-                  Bairro <span>(opcional)</span>
-                </label>
-                <Input id="district" name="district" />
-              </FormGroup>
-            </FormContainer>
-
-            <FormContainer>
-              <FormGroup id="zipCodeFormGroup">
-                <label htmlFor="zip_code">
-                  CEP <span>(opcional)</span>
-                </label>
-                <MaskedInput
-                  id="zip_code"
-                  name="zip_code"
-                  mask="99999-999"
-                  defaultValue={customer.zip_code}
-                />
-              </FormGroup>
-
-              <FormGroup id="cityFormGroup">
-                <label htmlFor="city">
-                  Cidade <span>(opcional)</span>
-                </label>
-                <Input id="city" name="city" />
-              </FormGroup>
-
-              <FormGroup id="stateFormGroup">
-                <label htmlFor="state">
-                  Estado <span>(opcional)</span>
-                </label>
-                <StatesSelect
-                  id="state"
-                  name="state"
-                  defaultValue={customer.state}
-                />
-              </FormGroup>
-            </FormContainer>
-          </Container>
-
-          <Container>
-            <header>
-              <h2>AUTOMÓVEIS</h2>
-            </header>
-
-            {cars.filter((car) => !car.removed).length > 0 && (
-              <CustomerCarsTable
-                cars={cars}
-                onEditCar={handleEditCar}
-                onRemoveCar={handleRemoveCar}
-              />
-            )}
-
-            <AddCarButton
-              onClick={() => {
-                setModalIsOpen(true);
-              }}
-            >
-              <FaPlus size={16} color={colors.blue.main} />
-              Adicionar automóvel
-            </AddCarButton>
-          </Container>
+          <CustomerCars
+            data={cars.filter((car) => !car.removed)}
+            showNewCarModal={() => {
+              setModalIsOpen(true);
+            }}
+            handleEditCar={handleEditCar}
+            handleRemoveCar={handleRemoveCar}
+          />
 
           <button type="submit" disabled={loading}>
             {loading ? 'SALVANDO...' : 'SALVAR'}
@@ -363,51 +229,14 @@ export default function New() {
         </Form>
       </Wrapper>
 
-      <NewCarModal
+      <NewCustomerCarModal
         isOpen={modalIsOpen}
-        initialData={selectedCar || {}}
-        schemaValidator={carSchema}
+        data={modalCustomerCar || {}}
         onClose={() => {
           setModalIsOpen(false);
         }}
         onSubmit={handleAddCar}
-      >
-        <FormContainer>
-          <FormGroup id="modelFormGroup">
-            <label htmlFor="model">Modelo</label>
-            <Input id="model" name="model" />
-          </FormGroup>
-
-          <FormGroup id="manufactureYearFormGroup">
-            <label htmlFor="manufacture_year">Ano</label>
-
-            <MaskedInput
-              id="manufacture_year"
-              name="manufacture_year"
-              mask="9999"
-              defaultValue={
-                selectedCar ? selectedCar.manufacture_year : undefined
-              }
-            />
-          </FormGroup>
-        </FormContainer>
-
-        <FormContainer>
-          <FormGroup id="manufacturerFormGroup">
-            <label htmlFor="manufacturer">Fabricante</label>
-            <Input id="manufacturer" name="manufacturer" />
-          </FormGroup>
-
-          <FormGroup id="licensePlateFormGroup">
-            <label htmlFor="license_plate">Placa</label>
-            <Input
-              id="license_plate"
-              name="license_plate"
-              disabled={selectedCar && !!selectedCar.id}
-            />
-          </FormGroup>
-        </FormContainer>
-      </NewCarModal>
+      />
     </>
   );
 }

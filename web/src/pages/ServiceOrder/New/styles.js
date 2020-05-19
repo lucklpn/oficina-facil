@@ -45,8 +45,9 @@ export const Container = styled.section`
   align-items: flex-start;
   justify-content: center;
   background: #f2f2f2;
+  border: 1px solid #ddd;
   border-radius: 10px;
-  box-shadow: 8px 8px 5px -1px rgba(0, 0, 0, 0.2);
+  box-shadow: 8px 8px 3px -1px rgba(0, 0, 0, 0.2);
   padding: 30px;
   margin: 30px 0;
 
@@ -70,42 +71,5 @@ export const Container = styled.section`
     h2 {
       color: ${colors.primary.main};
     }
-  }
-`;
-
-export const FormContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-`;
-
-export const FormGroup = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  margin: 15px 0;
-
-  @media screen and (max-width: 767px) {
-    width: 100% !important;
-  }
-
-  label {
-    margin-bottom: 10px;
-
-    span {
-      color: #999;
-      font-size: 10px;
-      font-weight: normal;
-      margin-left: 2px;
-    }
-  }
-
-  input {
-    width: 100%;
   }
 `;

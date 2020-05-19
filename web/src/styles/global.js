@@ -154,19 +154,17 @@ export default createGlobalStyle`
   }
 
   /** Custom Scrollbar */
-  #root *::-webkit-scrollbar {
+  body ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
 
-  #root *::-webkit-scrollbar-track {
+  body ::-webkit-scrollbar-track {
     background: transparent;
-    border-radius: 30px;
   }
 
-  #root *::-webkit-scrollbar-thumb {
+  body ::-webkit-scrollbar-thumb {
     background: ${colors.primary.main};
-    border-radius: 30px;
   }
 
   /** Custom Toastify */

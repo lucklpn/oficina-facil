@@ -19,7 +19,7 @@ class ServiceOrderController {
         : { deleted_at: null },
       limit: 10,
       offset: (page - 1) * 10,
-      order: [['updated_at', 'DESC']],
+      order: [['date', 'DESC']],
       include: [
         {
           model: Customer,
@@ -35,7 +35,7 @@ class ServiceOrderController {
         {
           model: CustomerCar,
           as: 'customer_car',
-          attributes: ['id', 'model', 'license_plate'],
+          attributes: ['id', 'model', 'license_plate', 'manufacture_year'],
         },
         {
           model: ServiceOrderItem,
@@ -65,6 +65,50 @@ class ServiceOrderController {
     res.header('X-Total-Count', count);
 
     return res.json(serviceOrders);
+  }
+
+  async show(req, res) {
+    const serviceOrder = await ServiceOrder.findOne({
+      where: {
+        id: req.params.id,
+        deleted_at: null,
+      },
+      include: [
+        {
+          model: Customer,
+          as: 'customer',
+          attributes: ['id', 'name'],
+        },
+        {
+          model: CustomerCar,
+          as: 'customer_car',
+          attributes: ['id', 'model', 'license_plate', 'manufacture_year'],
+        },
+        {
+          model: ServiceOrderItem,
+          as: 'items',
+          attributes: {
+            exclude: ['service_order_id', 'created_at', 'updated_at'],
+          },
+        },
+        {
+          model: ServiceOrderPayment,
+          as: 'payments',
+          attributes: {
+            exclude: ['service_order_id', 'created_at', 'updated_at'],
+          },
+          include: [
+            {
+              model: PaymentMethod,
+              as: 'payment_method',
+              attributes: { exclude: ['created_at', 'updated_at'] },
+            },
+          ],
+        },
+      ],
+    });
+
+    return res.json(serviceOrder);
   }
 
   async store(req, res) {

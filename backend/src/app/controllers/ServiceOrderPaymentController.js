@@ -73,7 +73,10 @@ class ServiceOrderPaymentController {
      * Verifica se o pagamento não excede o valor total da ordem de serviço
      */
 
-    if (paidValue + req.body.value > parseFloat(serviceOrder.total_value)) {
+    if (
+      paidValue + parseFloat(req.body.value) >
+      parseFloat(serviceOrder.total_value)
+    ) {
       return res.status(400).json({
         error: 'Valor de pagamento excede valor total da ordem de serviço.',
       });

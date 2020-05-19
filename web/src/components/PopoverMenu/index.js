@@ -26,7 +26,7 @@ export default function PopoverMenu({
         borderRadius: '10px',
         padding: '10px 0px',
       }}
-      content={() => <MenuList>{children}</MenuList>}
+      content={() => <MenuList onClick={onClickOutside}>{children}</MenuList>}
     >
       <MenuButton type="button" onClick={onButtonClick}>
         <FaEllipsisV size={18} color="#ccc" />
@@ -39,5 +39,7 @@ PopoverMenu.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClickOutside: PropTypes.func.isRequired,
   onButtonClick: PropTypes.func.isRequired,
-  children: PropTypes.arrayOf(PropTypes.element.isRequired).isRequired,
+  children: PropTypes.arrayOf(
+    PropTypes.oneOfType([PropTypes.element, PropTypes.bool])
+  ).isRequired,
 };

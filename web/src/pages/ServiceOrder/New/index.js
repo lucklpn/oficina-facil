@@ -16,11 +16,10 @@ import NewServiceItemModal from './NewServiceItemModal';
 import { Wrapper, Header } from './styles';
 
 export default function NewServiceOrder() {
-  const [serviceOrder, setServiceOrder] = useState({}); //eslint-disable-line
   const [serviceItems, setServiceItems] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalServiceItem, setModalServiceItem] = useState(undefined);
-  const [loading, setLoading] = useState(false); //eslint-disable-line
+  const [loading, setLoading] = useState(false);
 
   const totalValue = useMemo(() => {
     return serviceItems.reduce((total, item) => {
@@ -97,20 +96,22 @@ export default function NewServiceOrder() {
   }
 
   async function storeServicePayment(serviceOrderId, data) {
+    const parsedDate = parse(data.date, 'dd/MM/yyyy', new Date());
+
     await api.post(`service_orders/${serviceOrderId}/payments`, {
       ...data,
-      date: new Date(),
+      date: parsedDate,
     });
   }
 
   async function handleSubmit(data) {
     if (serviceItems.length === 0) {
-      toast.error('Por favor, informe os itens do serviço.');
+      toast.error('Por favor, informe os itens da ordem de serviço');
       return;
     }
 
     if (parseFloat(data.payment.value) > parseFloat(data.total_value)) {
-      toast.error('Valor de pagamento excede valor total da ordem de serviço.');
+      toast.error('Valor de pagamento excede valor total da ordem de serviço');
       return;
     }
 
@@ -126,10 +127,13 @@ export default function NewServiceOrder() {
       }
 
       if (payment.value) {
-        await storeServicePayment(serviceOrderId, payment);
+        await storeServicePayment(serviceOrderId, {
+          ...payment,
+          date: rest.date,
+        });
       }
 
-      toast.success('Serviço cadastrado com sucesso.');
+      toast.success('Ordem de serviço cadastrada com sucesso');
 
       setLoading(false);
 
@@ -139,7 +143,9 @@ export default function NewServiceOrder() {
     } catch (err) {
       setLoading(false);
       toast.error(
-        err.response ? err.response.data.error : 'Erro ao salvar serviço.'
+        err.response
+          ? err.response.data.error
+          : 'Erro ao salvar ordem de serviço'
       );
     }
   }
@@ -148,22 +154,18 @@ export default function NewServiceOrder() {
     <>
       <Wrapper>
         <Header>
-          <h1>CADASTRO DE SERVIÇO</h1>
+          <h1>CADASTRO DE ORDEM DE SERVIÇO</h1>
 
           <button type="button" className="cancel-button">
             <Link to="/orders">CANCELAR</Link>
           </button>
         </Header>
 
-        <Form
-          onSubmit={handleSubmit}
-          initialData={serviceOrder}
-          schema={serviceOrderSchema}
-        >
+        <Form onSubmit={handleSubmit} schema={serviceOrderSchema}>
           <MainData />
 
           <ServiceItems
-            serviceItems={serviceItems}
+            data={serviceItems}
             onShowModal={() => {
               setModalIsOpen(true);
             }}
@@ -186,7 +188,7 @@ export default function NewServiceOrder() {
 
       <NewServiceItemModal
         isOpen={modalIsOpen}
-        serviceItem={modalServiceItem}
+        data={modalServiceItem}
         onAddItem={handleAddServiceItem}
         onEditItem={handleEditServiceItem}
         onClose={() => {

@@ -24,6 +24,7 @@ routes.get('/customers/:customer_id/cars', CustomerCarController.index);
 routes.get('/customers/:customer_id/cars/:id', CustomerCarController.show);
 routes.get('/payment_methods', PaymentMethodController.index);
 routes.get('/service_orders', ServiceOrderController.index);
+routes.get('/service_orders/:id', ServiceOrderController.show);
 routes.get(
   '/service_orders/:service_order_id/items',
   ServiceOrderItemController.index
