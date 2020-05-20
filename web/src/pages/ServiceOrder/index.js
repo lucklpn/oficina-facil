@@ -9,6 +9,7 @@ import { MdRemoveRedEye } from 'react-icons/md';
 import { AiFillPrinter } from 'react-icons/ai';
 
 import api from '~/services/api';
+import history from '~/services/history';
 
 import InputSearch from '~/components/InputSearch';
 import TableData from '~/components/TableData';
@@ -235,7 +236,14 @@ export default function ServiceOrder() {
                           </button>
                         </li>
                         <li>
-                          <button type="button" onClick={() => {}}>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              history.push(`/orders/${order.id}/print`, {
+                                service_order: JSON.stringify(order),
+                              });
+                            }}
+                          >
                             <AiFillPrinter
                               size={15}
                               color={colors.purple.main}

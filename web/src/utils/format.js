@@ -8,9 +8,25 @@ function formatToPhone(value) {
   return formattedValue;
 }
 
+function formatToCpf(value) {
+  if (!value) return '';
+
+  let formattedValue = `${value.substring(0, 3)}.`;
+  formattedValue += `${value.substring(3, 6)}.`;
+  formattedValue += `${value.substring(6, 9)}-`;
+  formattedValue += value.substring(9, 11);
+
+  return formattedValue;
+}
+
 const { format: formatToCurrency } = new Intl.NumberFormat('pt-BR', {
   style: 'currency',
   currency: 'BRL',
 });
 
-export { formatToPhone, formatToCurrency };
+const { format: formatToDecial } = new Intl.NumberFormat('pt-BR', {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
+export { formatToPhone, formatToCpf, formatToCurrency, formatToDecial };

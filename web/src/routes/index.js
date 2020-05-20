@@ -7,6 +7,7 @@ import SignUp from '~/pages/SignUp';
 
 import ServiceOrder from '~/pages/ServiceOrder';
 import NewServiceOrder from '~/pages/ServiceOrder/New';
+import ServiceOrderPrinting from '~/pages/ServiceOrder/Print';
 import Customer from '~/pages/Customer';
 import NewCustomer from '~/pages/Customer/New';
 
@@ -18,7 +19,12 @@ export default function Routes() {
 
       <Route exact path="/orders" component={ServiceOrder} isPrivate />
       <Route path="/orders/new" component={NewServiceOrder} isPrivate />
-      <Route path="/orders/:id" component={NewServiceOrder} isPrivate />
+      <Route
+        path="/orders/:id/print"
+        component={ServiceOrderPrinting}
+        isPrivate
+        isPrint
+      />
 
       <Route exact path="/customers" component={Customer} isPrivate />
       <Route path="/customers/new" component={NewCustomer} isPrivate />

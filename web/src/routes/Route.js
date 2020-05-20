@@ -10,6 +10,7 @@ import { store } from '~/store';
 export default function RouteWrapper({
   component: Component,
   isPrivate,
+  isPrint,
   ...rest
 }) {
   const { signed } = store.getState().auth;
@@ -20,6 +21,10 @@ export default function RouteWrapper({
 
   if (signed && !isPrivate) {
     return <Redirect to="/orders" />;
+  }
+
+  if (isPrint) {
+    return <Component />;
   }
 
   const Layout = signed ? DefaultLayout : AuthLayout;
@@ -38,10 +43,12 @@ export default function RouteWrapper({
 
 RouteWrapper.propTypes = {
   isPrivate: PropTypes.bool,
+  isPrint: PropTypes.bool,
   component: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
     .isRequired,
 };
 
 RouteWrapper.defaultProps = {
   isPrivate: false,
+  isPrint: false,
 };
