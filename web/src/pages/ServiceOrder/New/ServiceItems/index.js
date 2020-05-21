@@ -49,9 +49,9 @@ export default function ServiceItems({
 ServiceItems.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      amount: PropTypes.number.isRequired,
+      amount: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
-      value: PropTypes.number.isRequired,
+      value: PropTypes.string.isRequired,
     })
   ).isRequired,
   onShowModal: PropTypes.func.isRequired,

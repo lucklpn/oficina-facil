@@ -122,7 +122,7 @@ PersonalData.propTypes = {
     id: PropTypes.number,
     cpf: PropTypes.string,
     phone: PropTypes.string,
-    zip_code: PropTypes.number,
+    zip_code: PropTypes.string,
     state: PropTypes.string,
   }),
 };

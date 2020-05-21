@@ -47,7 +47,7 @@ class ServiceOrderPaymentController {
 
     if (serviceOrder.paid_out) {
       return res.status(400).json({
-        error: 'Ordem de serviço já paga.',
+        error: 'Ordem de serviço totalmente paga.',
       });
     }
 

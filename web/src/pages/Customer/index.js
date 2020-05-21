@@ -51,7 +51,7 @@ function Customer() {
       }
     } catch (err) {
       toast.error(
-        err.response ? err.response.data.error : 'Erro ao buscar clientes'
+        err.response ? err.response.data.error : 'Erro ao buscar clientes.'
       );
     }
   }
@@ -79,10 +79,10 @@ function Customer() {
 
         setCustomers(customers.filter((c) => c.id !== id));
 
-        toast.success('Cliente excluído com sucesso');
+        toast.success('Cliente excluído com sucesso.');
       } catch (err) {
         toast.error(
-          err.response ? err.response.data.error : 'Erro ao excluir cliente'
+          err.response ? err.response.data.error : 'Erro ao excluir cliente.'
         );
       }
     }

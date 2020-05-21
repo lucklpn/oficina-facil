@@ -30,33 +30,16 @@ class ServiceOrderController {
                 name: { [Op.iLike]: `%${query}%` },
                 deleted_at: null,
               },
-          attributes: ['id', 'name'],
+          attributes: {
+            exclude: ['created_at', 'updated_at'],
+          },
         },
         {
           model: CustomerCar,
           as: 'customer_car',
-          attributes: ['id', 'model', 'license_plate', 'manufacture_year'],
-        },
-        {
-          model: ServiceOrderItem,
-          as: 'items',
           attributes: {
-            exclude: ['service_order_id', 'created_at', 'updated_at'],
+            exclude: ['created_at', 'updated_at'],
           },
-        },
-        {
-          model: ServiceOrderPayment,
-          as: 'payments',
-          attributes: {
-            exclude: ['service_order_id', 'created_at', 'updated_at'],
-          },
-          include: [
-            {
-              model: PaymentMethod,
-              as: 'payment_method',
-              attributes: { exclude: ['created_at', 'updated_at'] },
-            },
-          ],
         },
       ],
     });
@@ -77,12 +60,16 @@ class ServiceOrderController {
         {
           model: Customer,
           as: 'customer',
-          attributes: ['id', 'name'],
+          attributes: {
+            exclude: ['created_at', 'updated_at'],
+          },
         },
         {
           model: CustomerCar,
           as: 'customer_car',
-          attributes: ['id', 'model', 'license_plate', 'manufacture_year'],
+          attributes: {
+            exclude: ['created_at', 'updated_at'],
+          },
         },
         {
           model: ServiceOrderItem,

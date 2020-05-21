@@ -19,43 +19,12 @@ class CustomerCarController {
         deleted_at: null,
       },
       order: ['created_at'],
-      include: [
-        {
-          model: Customer,
-          as: 'customer',
-          attributes: ['id', 'name'],
-        },
-      ],
     });
 
     res.header('Access-Control-Expose-Headers', 'X-Total-Count');
     res.header('X-Total-Count', count);
 
     return res.json(customerCars);
-  }
-
-  async show(req, res) {
-    const { customer_id, id } = req.params;
-
-    const customer = await Customer.findByPk(customer_id, {
-      where: { deleted_at: null },
-    });
-
-    if (!customer) {
-      return res.status(400).json({ error: 'Cliente não encontrado.' });
-    }
-
-    const customerCar = await CustomerCar.findByPk(id, {
-      include: [
-        {
-          model: Customer,
-          as: 'customer',
-          attributes: ['id', 'name'],
-        },
-      ],
-    });
-
-    return res.json(customerCar || {});
   }
 
   async store(req, res) {

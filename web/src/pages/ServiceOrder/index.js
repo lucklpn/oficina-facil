@@ -240,7 +240,7 @@ export default function ServiceOrder() {
                             type="button"
                             onClick={() => {
                               history.push(`/orders/${order.id}/print`, {
-                                service_order: JSON.stringify(order),
+                                service_order_id: order.id,
                               });
                             }}
                           >

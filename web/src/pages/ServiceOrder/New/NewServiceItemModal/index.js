@@ -25,15 +25,8 @@ export default function NewServiceItemModal({
   });
 
   useEffect(() => {
-    setServiceItem(data || {});
+    setServiceItem(data);
   }, [data]);
-
-  function handleChangeValue(value) {
-    setServiceItem({
-      ...serviceItem,
-      value,
-    });
-  }
 
   return (
     <Modal
@@ -65,18 +58,7 @@ export default function NewServiceItemModal({
 
         <CustomFormGroup id="valueFormGroup">
           <label htmlFor="value">Valor Unitário (R$)</label>
-          <Input
-            type="number"
-            id="value"
-            name="value"
-            value={serviceItem.value || ''}
-            onChange={(e) => {
-              handleChangeValue(e.target.value);
-            }}
-            onBlur={(e) => {
-              handleChangeValue(Number(e.target.value).toFixed(2));
-            }}
-          />
+          <Input type="number" id="value" name="value" step="0.1" />
         </CustomFormGroup>
       </FormContainer>
     </Modal>

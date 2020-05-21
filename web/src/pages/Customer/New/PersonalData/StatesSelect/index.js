@@ -34,7 +34,7 @@ export default function StatesSelect({ name, defaultValue }) {
           )
         );
       } catch (err) {
-        toast.error('Erro ao buscar estados');
+        toast.error('Erro ao buscar estados.');
       }
     }
 

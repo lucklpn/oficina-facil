@@ -17,7 +17,7 @@ export default function SignIn() {
   const schema = Yup.object().shape({
     login: Yup.string().required('* Campo obrigatório'),
     password: Yup.string()
-      .min(6, 'A senha deve ter no mínimo 15 caracteres')
+      .min(6, 'A senha deve ter no mínimo 6 caracteres')
       .required('* Campo obrigatório'),
   });
 

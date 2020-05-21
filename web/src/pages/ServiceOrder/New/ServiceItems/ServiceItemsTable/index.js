@@ -77,9 +77,9 @@ export default function ServiceItemsTable({ data, onEditItem, onRemoveItem }) {
 ServiceItemsTable.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      amount: PropTypes.number.isRequired,
+      amount: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
-      value: PropTypes.number.isRequired,
+      value: PropTypes.string.isRequired,
     })
   ).isRequired,
   onEditItem: PropTypes.func,

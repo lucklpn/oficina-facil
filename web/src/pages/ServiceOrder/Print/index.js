@@ -19,28 +19,25 @@ import {
 import logo from '~/assets/logo.png';
 
 export default function ServiceOrderPrinting() {
-  const [serviceOrder, setServiceOrder] = useState({});
-  const [customer, setCustomer] = useState({});
+  const [serviceOrder, setServiceOrder] = useState(undefined);
 
   useEffect(() => {
+    async function loadServiceOrder(id) {
+      const response = await api.get(`service_orders/${id}`);
+
+      setServiceOrder(response.data);
+    }
+
     const { state } = window.history.state;
 
-    if (state.service_order) {
-      setServiceOrder(JSON.parse(state.service_order));
+    if (state.service_order_id) {
+      loadServiceOrder(state.service_order_id);
     }
   }, []);
 
-  useEffect(() => {
-    async function loadCustomer(id) {
-      const response = await api.get(`customers/${id}`);
-
-      setCustomer(response.data);
-    }
-
-    if (serviceOrder.customer) {
-      loadCustomer(serviceOrder.customer.id);
-    }
-  }, [serviceOrder]);
+  if (!serviceOrder) {
+    return <Wrapper />;
+  }
 
   return (
     <Wrapper>
@@ -88,25 +85,25 @@ export default function ServiceOrderPrinting() {
           <CustomerInfo>
             <div>
               <strong>Cliente: </strong>
-              <span>{customer.name}</span>
+              <span>{serviceOrder.customer.name}</span>
             </div>
 
             <div>
               <strong>Endereço: </strong>
               <span>
-                {`${customer.address}, ${customer.address_number}, ${customer.district} - ${customer.city}, ${customer.state}`}
+                {`${serviceOrder.customer.address}, ${serviceOrder.customer.address_number}, ${serviceOrder.customer.district} - ${serviceOrder.customer.city}, ${serviceOrder.customer.state}`}
               </span>
             </div>
 
             <div>
               <div>
                 <strong>Telefone: </strong>
-                <span>{formatToPhone(customer.phone)}</span>
+                <span>{formatToPhone(serviceOrder.customer.phone)}</span>
               </div>
 
               <div>
                 <strong>CPF: </strong>
-                <span>{formatToCpf(customer.cpf)}</span>
+                <span>{formatToCpf(serviceOrder.customer.cpf)}</span>
               </div>
             </div>
 

@@ -4,16 +4,21 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "build": "sucrase ./src -d ./dist --transforms imports",
+    "start": "node dist/server.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "helmet": "^3.22.0",
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.0.3",
     "sequelize": "^5.21.7",
     "validar-cpf": "^2.1.2",
+    "youch": "^2.0.10",
     "yup": "^0.28.4"
   },
   "devDependencies": {

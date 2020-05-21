@@ -18,7 +18,7 @@ export default function SignUp() {
     name: Yup.string().required('* Campo obrigatório'),
     login: Yup.string().required('* Campo obrigatório'),
     user_password: Yup.string()
-      .min(6, 'A senha deve ter no mínimo 15 caracteres')
+      .min(6, 'A senha deve ter no mínimo 6 caracteres')
       .required('* Campo obrigatório'),
   });
 

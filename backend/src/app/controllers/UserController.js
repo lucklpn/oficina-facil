@@ -21,7 +21,7 @@ class UserController {
     });
 
     if (loginExists) {
-      return res.status(400).json({ error: 'Email informado já está em uso.' });
+      return res.status(400).json({ error: 'Login informado já está em uso.' });
     }
 
     const { id, name, login, created_at, updated_at } = await User.create(

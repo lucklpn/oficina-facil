@@ -10,19 +10,19 @@ export const Container = styled(Modal)`
 `;
 
 export const CustomFormGroup = styled(FormGroup)`
-  #modelFormGroup {
+  &#modelFormGroup {
     width: 80%;
   }
 
-  #manufactureYearFormGroup {
+  &#manufactureYearFormGroup {
     width: 18%;
   }
 
-  #manufacturerFormGroup {
+  &#manufacturerFormGroup {
     width: 70%;
   }
 
-  #licensePlateFormGroup {
+  &#licensePlateFormGroup {
     width: 28%;
   }
 `;

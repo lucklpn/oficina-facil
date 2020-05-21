@@ -21,7 +21,6 @@ routes.use(authMiddleware);
 routes.get('/customers', CustomerController.index);
 routes.get('/customers/:id', CustomerController.show);
 routes.get('/customers/:customer_id/cars', CustomerCarController.index);
-routes.get('/customers/:customer_id/cars/:id', CustomerCarController.show);
 routes.get('/payment_methods', PaymentMethodController.index);
 routes.get('/service_orders', ServiceOrderController.index);
 routes.get('/service_orders/:id', ServiceOrderController.show);

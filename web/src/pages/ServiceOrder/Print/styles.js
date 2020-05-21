@@ -144,6 +144,7 @@ export const DateIssue = styled.div`
   align-items: center;
   justify-content: flex-end;
   border: 1.5px solid #999;
+  font-size: 13px;
   padding: 10px;
   margin-top: 15px;
 `;
