@@ -16,9 +16,9 @@ import TableData from '~/components/TableData';
 import PopoverMenu from '~/components/PopoverMenu';
 import Pagination from '~/components/Pagination';
 import Alert from '~/components/Alert';
-import NewPaymentModal from './NewPaymentModal';
-import ServiceOrderStatus from './ServiceOrderStatus';
-import DetailsModal from './DetailsModal';
+import NewPaymentModal from './components/NewPaymentModal';
+import ServiceOrderStatus from './components/ServiceOrderStatus';
+import DetailsModal from './components/DetailsModal';
 
 import colors from '~/utils/colors';
 import { formatToCurrency } from '~/utils/format';
@@ -31,7 +31,7 @@ export default function ServiceOrder() {
   const [currentPageIndex, setCurrentPageIndex] = useState(1);
   const [queryFilter, setQueryFilter] = useState('');
   const [popoverOpen, setPopoverOpen] = useState(null);
-  const [modalOpen, setModalOpen] = useState(null);
+  const [modalServiceOrder, setModalServiceOrder] = useState(null);
 
   useEffect(() => {
     async function loadServiceOrders() {
@@ -57,6 +57,10 @@ export default function ServiceOrder() {
       if (!page) {
         setItensAmount(Number(response.headers['x-total-count']));
       }
+
+      if (response.data.length <= 0) {
+        toast.info('Nenhuma ordem de serviço encontrada');
+      }
     } catch (err) {
       toast.error(
         err.response
@@ -73,10 +77,8 @@ export default function ServiceOrder() {
   }
 
   function handleDelete(id) {
-    async function deleteServiceOrder(closeAlert) {
+    async function deleteServiceOrder() {
       try {
-        closeAlert();
-
         await api.delete(`service_orders/${id}`);
 
         setItensAmount(itensAmount - 1);
@@ -210,7 +212,7 @@ export default function ServiceOrder() {
                             <button
                               type="button"
                               onClick={() => {
-                                setModalOpen(order.id);
+                                setModalServiceOrder(order.id);
                               }}
                             >
                               <FaFileInvoiceDollar
@@ -279,14 +281,15 @@ export default function ServiceOrder() {
         </section>
       </Container>
 
-      <NewPaymentModal
-        isOpen={!!modalOpen}
-        serviceOrderId={modalOpen || -1}
-        onSubmit={handleRegisterNewPayment}
-        onClose={() => {
-          setModalOpen(null);
-        }}
-      />
+      {modalServiceOrder && (
+        <NewPaymentModal
+          serviceOrderId={modalServiceOrder || -1}
+          onSubmit={handleRegisterNewPayment}
+          onClose={() => {
+            setModalServiceOrder(null);
+          }}
+        />
+      )}
     </>
   );
 }

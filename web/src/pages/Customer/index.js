@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { confirmAlert } from 'react-confirm-alert';
-import { FaPen, FaTools, FaTrashAlt } from 'react-icons/fa';
+import { FaPen, FaTrashAlt } from 'react-icons/fa';
 
 import api from '~/services/api';
 import history from '~/services/history';
@@ -14,7 +14,7 @@ import Pagination from '~/components/Pagination';
 import Alert from '~/components/Alert';
 
 import colors from '~/utils/colors';
-import { formatToPhone } from '~/utils/format';
+import { formatToPhone, formatToAddress } from '~/utils/format';
 
 import { Container, Header } from './styles';
 
@@ -49,6 +49,10 @@ function Customer() {
       if (!page) {
         setItensAmount(Number(response.headers['x-total-count']));
       }
+
+      if (response.data.length <= 0) {
+        toast.info('Nenhum cliente encontrado');
+      }
     } catch (err) {
       toast.error(
         err.response ? err.response.data.error : 'Erro ao buscar clientes.'
@@ -63,10 +67,8 @@ function Customer() {
   }
 
   function handleDelete(id) {
-    async function deleteRecipient(closeAlert) {
+    async function deleteRecipient() {
       try {
-        closeAlert();
-
         await api.delete(`customers/${id}`);
 
         setItensAmount(itensAmount - 1);
@@ -126,6 +128,7 @@ function Customer() {
                 <th id="idColumn">ID</th>
                 <th id="nameColumn">NOME</th>
                 <th id="phoneColumn">TELEFONE</th>
+                <th id="addressColumn">ENDEREÇO</th>
                 <th id="menuColumn"> </th>
               </tr>
             </thead>
@@ -134,7 +137,14 @@ function Customer() {
                 <tr key={String(customer.id)}>
                   <td>{customer.id}</td>
                   <td>{customer.name}</td>
-                  <td>{formatToPhone(customer.phone)}</td>
+                  <td>
+                    {customer.phone
+                      ? formatToPhone(customer.phone)
+                      : 'Não informado'}
+                  </td>
+                  <td>
+                    {customer ? formatToAddress(customer) : 'Não informado'}
+                  </td>
                   <td>
                     <PopoverMenu
                       isOpen={popoverOpen === customer.id}
@@ -145,12 +155,6 @@ function Customer() {
                         )
                       }
                     >
-                      <li>
-                        <button type="button" onClick={() => {}}>
-                          <FaTools size={15} color={colors.blue.main} />
-                          Serviços
-                        </button>
-                      </li>
                       <li>
                         <button
                           type="button"

@@ -3,7 +3,26 @@ import PropTypes from 'prop-types';
 
 import { Container, CancelButton, ConfirmButton } from './styles';
 
-export default function Alert({ onClose, title, message, onConfirm }) {
+export default function Alert({
+  onClose,
+  title,
+  message,
+  onConfirm,
+  onCancel,
+}) {
+  function handleCancel() {
+    onClose();
+
+    if (onCancel) {
+      onCancel();
+    }
+  }
+
+  function handleConfirm() {
+    onClose();
+    onConfirm();
+  }
+
   return (
     <Container>
       <header>
@@ -14,8 +33,8 @@ export default function Alert({ onClose, title, message, onConfirm }) {
         <span>{message}</span>
 
         <div>
-          <CancelButton onClick={onClose}>NÃO</CancelButton>
-          <ConfirmButton onClick={() => onConfirm(onClose)}>SIM</ConfirmButton>
+          <CancelButton onClick={handleCancel}>NÃO</CancelButton>
+          <ConfirmButton onClick={handleConfirm}>SIM</ConfirmButton>
         </div>
       </section>
     </Container>
@@ -27,4 +46,9 @@ Alert.propTypes = {
   message: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
+  onCancel: PropTypes.func,
+};
+
+Alert.defaultProps = {
+  onCancel: undefined,
 };

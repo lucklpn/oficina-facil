@@ -22,6 +22,7 @@ import {
 } from './styles';
 
 import Logo from '~/assets/logo.png';
+import Avatar from '~/assets/avatar.png';
 
 export default function Header() {
   const [pages, setPages] = useState([
@@ -70,10 +71,7 @@ export default function Header() {
           </nav>
 
           <aside>
-            <img
-              src="https://api.adorable.io/avatars/50/abott@adorable.png"
-              alt="Avatar"
-            />
+            <img src={Avatar} alt="Avatar" />
 
             <div>
               <User>{profile.name}</User>
@@ -99,10 +97,7 @@ export default function Header() {
               <IoIosClose size={40} color="#ccc" />
             </CloseMenu>
 
-            <img
-              src="https://api.adorable.io/avatars/100/abott@adorable.png"
-              alt="Avatar"
-            />
+            <img src={Avatar} alt="Avatar" />
 
             <div>
               <User>{profile.name}</User>

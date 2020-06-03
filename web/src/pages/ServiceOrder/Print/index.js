@@ -4,7 +4,12 @@ import pt from 'date-fns/locale/pt';
 
 import api from '~/services/api';
 
-import { formatToPhone, formatToCpf, formatToDecial } from '~/utils/format';
+import {
+  formatToPhone,
+  formatToCpf,
+  formatToDecial,
+  formatToAddress,
+} from '~/utils/format';
 
 import {
   Wrapper,
@@ -24,6 +29,17 @@ export default function ServiceOrderPrinting() {
   useEffect(() => {
     async function loadServiceOrder(id) {
       const response = await api.get(`service_orders/${id}`);
+
+      /**
+       * A tabela de itens deve possuir no mínimo 20 itens
+       */
+      while (response.data.items.length < 20) {
+        const lastId = response.data.items[response.data.items.length - 1].id;
+
+        response.data.items.push({
+          id: lastId + 1,
+        });
+      }
 
       setServiceOrder(response.data);
     }
@@ -47,22 +63,8 @@ export default function ServiceOrderPrinting() {
 
           <CompanyInfo>
             <h3>AUTO MECÂNICA JUNIOR IORI</h3>
-            <div>
-              <strong>Endereço: </strong>
-              <span>rua Teste Impressão, 245</span>
-            </div>
-            <div>
-              <strong>Bairro: </strong>
-              <span>Jardim Panorama</span>
-            </div>
-            <div>
-              <strong>Cidade: </strong>
-              <span>Itajobi - SP</span>
-            </div>
-            <div>
-              <strong>Telefone: </strong>
-              <span>(17) 99752-7884</span>
-            </div>
+            <span>Av. das Acácias, 100, Itajobi - SP</span>
+            <span>(17) 99752-7884</span>
           </CompanyInfo>
         </div>
 
@@ -90,15 +92,17 @@ export default function ServiceOrderPrinting() {
 
             <div>
               <strong>Endereço: </strong>
-              <span>
-                {`${serviceOrder.customer.address}, ${serviceOrder.customer.address_number}, ${serviceOrder.customer.district} - ${serviceOrder.customer.city}, ${serviceOrder.customer.state}`}
-              </span>
+              <span>{formatToAddress(serviceOrder.customer)}</span>
             </div>
 
             <div>
               <div>
                 <strong>Telefone: </strong>
-                <span>{formatToPhone(serviceOrder.customer.phone)}</span>
+                <span>
+                  {serviceOrder.customer.phone
+                    ? formatToPhone(serviceOrder.customer.phone)
+                    : 'Não informado'}
+                </span>
               </div>
 
               <div>
@@ -125,10 +129,6 @@ export default function ServiceOrderPrinting() {
               </div>
             </div>
           </CustomerInfo>
-
-          <DateIssue>
-            <i>Emitido em: {format(new Date(), "dd/MM/yyyy' 'HH:mm:ss")}</i>
-          </DateIssue>
         </div>
       </Header>
 
@@ -147,7 +147,7 @@ export default function ServiceOrderPrinting() {
                 <tr key={String(item.id)}>
                   <td>{item.amount}</td>
                   <td>{item.description}</td>
-                  <td>{formatToDecial(item.value)}</td>
+                  <td>{item.value ? formatToDecial(item.value) : ''}</td>
                 </tr>
               ))}
 
@@ -157,6 +157,10 @@ export default function ServiceOrderPrinting() {
             </tr>
           </tbody>
         </table>
+
+        <DateIssue>
+          <i>Emitido em: {format(new Date(), "dd/MM/yyyy' 'HH:mm:ss")}</i>
+        </DateIssue>
       </Content>
     </Wrapper>
   );

@@ -5,11 +5,11 @@ import { MdCheckBoxOutlineBlank, MdCheckBox } from 'react-icons/md';
 
 import colors from '~/utils/colors';
 
-import PaymentMethodsSelect from '../../PaymentMethodsSelect';
+import PaymentMethodsSelect from '../../../components/PaymentMethodsSelect';
 
-import { FormContainer } from '../../styles';
-import { Container } from '../styles';
-import { CustomFormGroup, Divider } from './styles';
+import { FormContainer } from '../../../styles';
+import { Container } from '../../styles';
+import { CustomFormGroup, CashPaymentLabel, Divider } from './styles';
 
 export default function FinancialData({ totalValue }) {
   const [isCashPayment, setIsCashPayment] = useState(false);
@@ -59,7 +59,9 @@ export default function FinancialData({ totalValue }) {
             <MdCheckBoxOutlineBlank size={22} color={colors.primary.main} />
           )}
 
-          <label htmlFor="cash_payment">Pagamento à vista</label>
+          <CashPaymentLabel htmlFor="cash_payment" selected={!!isCashPayment}>
+            Pagamento à vista
+          </CashPaymentLabel>
         </CustomFormGroup>
       </FormContainer>
 

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import Modal from '~/components/Modal';
 
-import { FormGroup } from '../styles';
+import { FormGroup } from '../../styles';
 
 export const Container = styled(Modal)`
   position: relative;

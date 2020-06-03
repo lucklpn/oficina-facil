@@ -29,4 +29,38 @@ const { format: formatToDecial } = new Intl.NumberFormat('pt-BR', {
   maximumFractionDigits: 2,
 });
 
-export { formatToPhone, formatToCpf, formatToCurrency, formatToDecial };
+function formatToAddress(customer) {
+  if (!customer) return '';
+
+  let fullAddress = '';
+
+  if (customer.address) {
+    fullAddress += `${customer.address}, `;
+  }
+
+  if (customer.address_number) {
+    fullAddress += `${customer.address_number}, `;
+  }
+
+  if (customer.district) {
+    fullAddress += `${customer.district} - `;
+  }
+
+  if (customer.city) {
+    fullAddress += `${customer.city}, `;
+  }
+
+  if (customer.state) {
+    fullAddress += `${customer.state}`;
+  }
+
+  return fullAddress || 'Não informado';
+}
+
+export {
+  formatToPhone,
+  formatToCpf,
+  formatToCurrency,
+  formatToDecial,
+  formatToAddress,
+};

@@ -5,7 +5,7 @@ import { Input } from '@rocketseat/unform';
 import MaskedInput from '../MaskedInput';
 import StatesSelect from './StatesSelect';
 
-import { Container, FormContainer } from '../styles';
+import { Container, FormContainer } from '../../styles';
 import { CustomFormGroup } from './styles';
 
 export default function PersonalData({ data }) {

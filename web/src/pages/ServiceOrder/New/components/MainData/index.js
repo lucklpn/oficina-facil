@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { format } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 
-import MaskedInput from '../../MaskedInput';
+import MaskedInput from '../../../components/MaskedInput';
 import CustomersSelect from './CustomersSelect';
 import CustomerCarsSelect from './CustomerCarsSelect';
 
-import { FormContainer } from '../../styles';
-import { Container } from '../styles';
+import { FormContainer } from '../../../styles';
+import { Container } from '../../styles';
 import { CustomFormGroup } from './styles';
 
 export default function MainData() {

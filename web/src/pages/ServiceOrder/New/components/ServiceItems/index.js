@@ -7,7 +7,7 @@ import ServiceItemsTable from './ServiceItemsTable';
 
 import colors from '~/utils/colors';
 
-import { Container } from '../styles';
+import { Container } from '../../styles';
 import { AddButton } from './styles';
 
 export default function ServiceItems({

@@ -9,15 +9,10 @@ import Modal from '~/components/Modal';
 import MaskedInput from '../MaskedInput';
 import PaymentMethodsSelect from '../PaymentMethodsSelect';
 
-import { FormContainer } from '../styles';
+import { FormContainer } from '../../styles';
 import { CustomFormGroup } from './styles';
 
-export default function NewPaymentModal({
-  isOpen,
-  serviceOrderId,
-  onSubmit,
-  onClose,
-}) {
+export default function NewPaymentModal({ serviceOrderId, onSubmit, onClose }) {
   const [serviceOrderPayment, setServiceOrderPayment] = useState({});
 
   const schema = Yup.object().shape({
@@ -41,7 +36,7 @@ export default function NewPaymentModal({
 
   return (
     <Modal
-      isOpen={isOpen}
+      isOpen
       title="Registrar pagamento"
       schemaValidator={schema}
       onClose={onClose}
@@ -89,7 +84,6 @@ export default function NewPaymentModal({
 }
 
 NewPaymentModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
   serviceOrderId: PropTypes.number.isRequired,
   onSubmit: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,

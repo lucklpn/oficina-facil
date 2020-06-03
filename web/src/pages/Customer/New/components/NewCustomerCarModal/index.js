@@ -5,15 +5,10 @@ import * as Yup from 'yup';
 
 import MaskedInput from '../MaskedInput';
 
-import { FormContainer } from '../styles';
+import { FormContainer } from '../../styles';
 import { Container, CustomFormGroup } from './styles';
 
-export default function NewCustomerCarModal({
-  isOpen,
-  data,
-  onSubmit,
-  onClose,
-}) {
+export default function NewCustomerCarModal({ data, onSubmit, onClose }) {
   const schema = Yup.object().shape({
     model: Yup.string().required('* Campo obrigatório'),
     manufacture_year: Yup.string().required('* Campo obrigatório'),
@@ -23,7 +18,7 @@ export default function NewCustomerCarModal({
 
   return (
     <Container
-      isOpen={isOpen}
+      isOpen
       title="Adicionar veículo"
       initialData={data}
       schemaValidator={schema}
@@ -68,7 +63,6 @@ export default function NewCustomerCarModal({
 }
 
 NewCustomerCarModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
   data: PropTypes.shape().isRequired,
   onSubmit: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,

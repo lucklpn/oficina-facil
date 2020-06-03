@@ -3,11 +3,12 @@ import styled from 'styled-components';
 import colors from '~/utils/colors';
 
 export const Container = styled.section`
+  max-width: 300px;
   display: flex;
   flex: 1;
   align-items: center;
   justify-content: space-between;
-  margin-top: 30px;
+  margin: 30px auto 0;
 `;
 
 export const PaginationButton = styled.button`

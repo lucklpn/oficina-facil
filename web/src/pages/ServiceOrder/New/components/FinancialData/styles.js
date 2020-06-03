@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
-import { FormGroup } from '../../styles';
+import colors from '~/utils/colors';
+
+import { FormGroup } from '../../../styles';
 
 export const CustomFormGroup = styled(FormGroup)`
   &#totalValueFormGroup,
@@ -27,6 +29,11 @@ export const CustomFormGroup = styled(FormGroup)`
     width: 50%;
     margin: 15px auto 15px 2%;
   }
+`;
+
+export const CashPaymentLabel = styled.label`
+  color: ${(props) => (props.selected ? colors.primary.main : colors.label)};
+  cursor: pointer;
 `;
 
 export const Divider = styled.hr`

@@ -4,14 +4,16 @@ import { Form } from '@rocketseat/unform';
 import * as Yup from 'yup';
 import { parse } from 'date-fns';
 import { toast } from 'react-toastify';
+import { confirmAlert } from 'react-confirm-alert';
 
 import api from '~/services/api';
 import history from '~/services/history';
 
-import MainData from './MainData';
-import ServiceItems from './ServiceItems';
-import FinancialData from './FinancialData';
-import NewServiceItemModal from './NewServiceItemModal';
+import Alert from '~/components/Alert';
+import MainData from './components/MainData';
+import ServiceItems from './components/ServiceItems';
+import FinancialData from './components/FinancialData';
+import NewServiceItemModal from './components/NewServiceItemModal';
 
 import { Wrapper, Header } from './styles';
 
@@ -134,12 +136,25 @@ export default function NewServiceOrder() {
       }
 
       toast.success('Ordem de serviço cadastrada com sucesso');
-
       setLoading(false);
 
-      setTimeout(() => {
-        history.push('/orders');
-      }, 3000);
+      confirmAlert({
+        customUI: (props) => (
+          <Alert
+            {...props}
+            title="Atenção"
+            message="Deseja imprimir a ordem de serviço?"
+            onConfirm={() => {
+              history.push(`/orders/${serviceOrderId}/print`, {
+                service_order_id: serviceOrderId,
+              });
+            }}
+            onCancel={() => {
+              history.push('/orders');
+            }}
+          />
+        ),
+      });
     } catch (err) {
       setLoading(false);
       toast.error(
@@ -186,15 +201,16 @@ export default function NewServiceOrder() {
         </Form>
       </Wrapper>
 
-      <NewServiceItemModal
-        isOpen={modalIsOpen}
-        data={modalServiceItem}
-        onAddItem={handleAddServiceItem}
-        onEditItem={handleEditServiceItem}
-        onClose={() => {
-          setModalIsOpen(false);
-        }}
-      />
+      {modalIsOpen && (
+        <NewServiceItemModal
+          data={modalServiceItem}
+          onAddItem={handleAddServiceItem}
+          onEditItem={handleEditServiceItem}
+          onClose={() => {
+            setModalIsOpen(false);
+          }}
+        />
+      )}
     </>
   );
 }

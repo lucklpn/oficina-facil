@@ -4,13 +4,12 @@ import { Input } from '@rocketseat/unform';
 import * as Yup from 'yup';
 
 import Modal from '~/components/Modal';
-import MaskedInput from '../../MaskedInput';
+import MaskedInput from '../../../components/MaskedInput';
 
-import { FormContainer } from '../../styles';
+import { FormContainer } from '../../../styles';
 import { CustomFormGroup } from './styles';
 
 export default function NewServiceItemModal({
-  isOpen,
   data,
   onAddItem,
   onEditItem,
@@ -30,7 +29,7 @@ export default function NewServiceItemModal({
 
   return (
     <Modal
-      isOpen={isOpen}
+      isOpen
       title="Adicionar item"
       initialData={serviceItem}
       schemaValidator={schema}
@@ -66,7 +65,6 @@ export default function NewServiceItemModal({
 }
 
 NewServiceItemModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
   data: PropTypes.shape({
     description: PropTypes.string,
     amount: PropTypes.number,

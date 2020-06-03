@@ -7,9 +7,9 @@ import { toast } from 'react-toastify';
 import api from '~/services/api';
 import history from '~/services/history';
 
-import PersonalData from './PersonalData';
-import CustomerCars from './CustomerCars';
-import NewCustomerCarModal from './NewCustomerCarModal';
+import PersonalData from './components/PersonalData';
+import CustomerCars from './components/CustomerCars';
+import NewCustomerCarModal from './components/NewCustomerCarModal';
 
 import { Wrapper, Header } from './styles';
 
@@ -185,9 +185,7 @@ export default function New() {
         `Cliente ${customer.id ? 'atualizado' : 'cadastrado'} com sucesso`
       );
       setLoading(false);
-      setTimeout(() => {
-        history.push('/customers');
-      }, 3000);
+      history.push('/customers');
     } catch (err) {
       setLoading(false);
       toast.error(
@@ -229,14 +227,15 @@ export default function New() {
         </Form>
       </Wrapper>
 
-      <NewCustomerCarModal
-        isOpen={modalIsOpen}
-        data={modalCustomerCar || {}}
-        onClose={() => {
-          setModalIsOpen(false);
-        }}
-        onSubmit={handleAddCar}
-      />
+      {modalIsOpen && (
+        <NewCustomerCarModal
+          data={modalCustomerCar || {}}
+          onClose={() => {
+            setModalIsOpen(false);
+          }}
+          onSubmit={handleAddCar}
+        />
+      )}
     </>
   );
 }

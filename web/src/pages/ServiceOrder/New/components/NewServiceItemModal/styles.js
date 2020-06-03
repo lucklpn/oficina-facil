@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
-import { FormGroup } from '../styles';
+import { FormGroup } from '../../../styles';
 
 export const CustomFormGroup = styled(FormGroup)`
-  &#dateFormGroup,
+  &#amountFormGroup,
   &#valueFormGroup {
     width: 49%;
   }

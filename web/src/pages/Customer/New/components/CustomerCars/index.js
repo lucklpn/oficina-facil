@@ -7,7 +7,7 @@ import colors from '~/utils/colors';
 
 import CustomerCarsTable from './CustomerCarsTable';
 
-import { Container } from '../styles';
+import { Container } from '../../styles';
 import { AddCarButton } from './styles';
 
 export default function CustomerCars({

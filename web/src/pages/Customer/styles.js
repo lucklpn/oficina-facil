@@ -9,7 +9,7 @@ export const Container = styled.section`
   & > section {
     background: #f2f2f2;
     border-radius: 10px;
-    box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 8px 8px 3px -1px rgba(0, 0, 0, 0.2);
     padding: 30px;
     margin-top: 30px;
 
@@ -35,17 +35,19 @@ export const Container = styled.section`
       overflow: auto;
 
       table {
-        th#idColumn {
-          width: 75px;
-          text-align: center;
-        }
-
         th#nameColumn {
+          width: 40%;
           min-width: 300px;
         }
 
         th#phoneColumn {
+          width: 20%;
           min-width: 180px;
+        }
+
+        th#addressColumn {
+          width: 40%;
+          min-width: 300px;
         }
 
         td:first-child {
