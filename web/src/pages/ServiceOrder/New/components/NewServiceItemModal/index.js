@@ -57,7 +57,7 @@ export default function NewServiceItemModal({
 
         <CustomFormGroup id="valueFormGroup">
           <label htmlFor="value">Valor Unitário (R$)</label>
-          <Input type="number" id="value" name="value" step="0.1" />
+          <Input type="number" id="value" name="value" step="0.01" />
         </CustomFormGroup>
       </FormContainer>
     </Modal>

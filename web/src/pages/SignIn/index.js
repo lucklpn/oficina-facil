@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 
 import { signInRequest } from '~/store/modules/auth/actions';
 
-import { Container, Content } from './styles';
+import { Container, Content, FormGroup } from './styles';
 
 import Logo from '~/assets/logo.png';
 
@@ -31,9 +31,15 @@ export default function SignIn() {
 
       <Form schema={schema} onSubmit={handleSubmit}>
         <Content>
-          <Input id="login" name="login" />
+          <FormGroup>
+            <label htmlFor="login">Login</label>
+            <Input id="login" name="login" />
+          </FormGroup>
 
-          <Input type="password" id="password" name="password" />
+          <FormGroup>
+            <label htmlFor="password">Senha</label>
+            <Input type="password" id="password" name="password" />
+          </FormGroup>
         </Content>
 
         <button type="submit" disabled={loading}>

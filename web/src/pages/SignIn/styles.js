@@ -10,7 +10,7 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.6);
   border-radius: 10px;
   padding: 30px;
 
@@ -53,8 +53,18 @@ export const Content = styled.div`
   input {
     width: 100%;
   }
+`;
 
-  input:last-of-type {
+export const FormGroup = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  & + div {
     margin-top: 15px;
+  }
+
+  label {
+    margin-bottom: 5px;
   }
 `;
