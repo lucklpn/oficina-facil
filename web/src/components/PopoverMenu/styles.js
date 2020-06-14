@@ -24,6 +24,10 @@ export const MenuList = styled.ul`
       text-transform: capitalize;
       padding: 0;
 
+      a {
+        color: ${colors.text};
+      }
+
       &:hover {
         background: transparent !important;
       }

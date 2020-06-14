@@ -145,9 +145,8 @@ export default function NewServiceOrder() {
             title="Atenção"
             message="Deseja imprimir a ordem de serviço?"
             onConfirm={() => {
-              history.push(`/orders/${serviceOrderId}/print`, {
-                service_order_id: serviceOrderId,
-              });
+              window.open(`/orders/print?service_order_id=${serviceOrderId}`);
+              history.push('/orders');
             }}
             onCancel={() => {
               history.push('/orders');

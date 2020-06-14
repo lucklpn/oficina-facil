@@ -78,6 +78,7 @@ export default createGlobalStyle`
   }
 
   button {
+    min-width: max-content;
     height: 36px;
     display: flex;
     align-items: center;

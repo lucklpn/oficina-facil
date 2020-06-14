@@ -15,20 +15,21 @@ export default function Routes() {
   return (
     <Switch>
       <Route exact path="/" component={SignIn} />
-      <Route path="/register" component={SignUp} />
+      <Route exact path="/register" component={SignUp} />
 
       <Route exact path="/orders" component={ServiceOrder} isPrivate />
-      <Route path="/orders/new" component={NewServiceOrder} isPrivate />
+      <Route exact path="/orders/new" component={NewServiceOrder} isPrivate />
       <Route
-        path="/orders/:id/print"
+        exact
+        path="/orders/print"
         component={ServiceOrderPrinting}
         isPrivate
         isPrint
       />
 
       <Route exact path="/customers" component={Customer} isPrivate />
-      <Route path="/customers/new" component={NewCustomer} isPrivate />
-      <Route path="/customers/:id" component={NewCustomer} isPrivate />
+      <Route exact path="/customers/new" component={NewCustomer} isPrivate />
+      <Route exact path="/customers/:id" component={NewCustomer} isPrivate />
     </Switch>
   );
 }

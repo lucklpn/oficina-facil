@@ -31,9 +31,9 @@ export default function ServiceOrderPrinting() {
       const response = await api.get(`service_orders/${id}`);
 
       /**
-       * A tabela de itens deve possuir no mínimo 20 itens
+       * A tabela de itens deve possuir no mínimo 17 itens
        */
-      while (response.data.items.length < 20) {
+      while (response.data.items.length < 17) {
         const lastId = response.data.items[response.data.items.length - 1].id;
 
         response.data.items.push({
@@ -44,10 +44,12 @@ export default function ServiceOrderPrinting() {
       setServiceOrder(response.data);
     }
 
-    const { state } = window.history.state;
+    const serviceOrderId = new URL(window.location.href).searchParams.get(
+      'service_order_id'
+    );
 
-    if (state.service_order_id) {
-      loadServiceOrder(state.service_order_id);
+    if (serviceOrderId) {
+      loadServiceOrder(serviceOrderId);
     }
   }, []);
 
